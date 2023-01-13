@@ -40,6 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           "fullName": fullNameController.text.trim(),
           "email": emailController.text.trim(),
           "phone": int.parse(phoneController.text.trim()),
+          "address": "",
           "isAdmin": false
         });
         Navigator.pop(context);

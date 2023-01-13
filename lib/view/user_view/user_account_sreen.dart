@@ -3,6 +3,7 @@ import 'package:complaint_management_app/view/auth/login/login.dart';
 import 'package:complaint_management_app/view/welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -16,6 +17,8 @@ class _AccountScreenState extends State<AccountScreen> {
   var email;
   var phone;
   var isAdmin;
+  var address;
+
   Future<void> getuserData() async {
     await FirebaseFirestore.instance
         .collection("users")
@@ -27,6 +30,7 @@ class _AccountScreenState extends State<AccountScreen> {
       email = event['email'];
       phone = event['phone'];
       isAdmin = event['isAdmin'];
+      address = event['address'];
     });
     setState(() {});
   }
@@ -50,11 +54,13 @@ class _AccountScreenState extends State<AccountScreen> {
                     collection
                         .doc(FirebaseAuth.instance.currentUser!.uid)
                         .update({
-                          a: _textFieldController.text.trim().toString()
-                        }) // <-- Updated data
-                        .then((_) => Navigator.pop(context))
-                        .catchError((error) => print('Failed: $error'));
-                    setState(() {});
+                      a: _textFieldController.text.trim().toString()
+                    }) // <-- Updated data
+                        .then((_) {
+                      Navigator.pop(context);
+                      getuserData();
+                      // setState(() {});
+                    }).catchError((error) => print('Failed: $error'));
                   },
                   child: const Text("edit"))
             ],
@@ -174,7 +180,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       leading: CircleAvatar(
                           backgroundColor: Colors.blue.shade100,
                           child: Icon(
-                            Icons.person,
+                            Icons.phone,
                             color: Colors.blue,
                           )),
                       title: Text(
@@ -199,7 +205,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       leading: CircleAvatar(
                           backgroundColor: Colors.blue.shade100,
                           child: Icon(
-                            Icons.person,
+                            Icons.alternate_email_rounded,
                             color: Colors.blue,
                           )),
                       title: Text(
@@ -214,6 +220,33 @@ class _AccountScreenState extends State<AccountScreen> {
                       //   size: 20,
                       //   color: Colors.blue,
                       // ),
+                    ),
+                    ListTile(
+                      leading: CircleAvatar(
+                          backgroundColor: Colors.blue.shade100,
+                          child: Icon(
+                            Icons.house_rounded,
+                            color: Colors.blue,
+                          )),
+                      title: Text(
+                        address.toString() == ""
+                            ? "Please enter your address"
+                            : address.toString(),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      trailing: GestureDetector(
+                        onTap: () {
+                          _displayTextInputDialog(context, "address");
+                        },
+                        child: Icon(
+                          Icons.edit,
+                          color: Colors.blue,
+                          size: 20,
+                        ),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 16, left: 18),

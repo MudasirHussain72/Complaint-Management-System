@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:complaint_management_app/view/admin_view/admin_main_screen.dart';
+import 'package:complaint_management_app/view/auth/reset_password.dart';
 import 'package:complaint_management_app/view/user_view/user_dashboard_screen.dart';
 import 'package:complaint_management_app/view/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -203,11 +204,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 26),
                     child: InkWell(
                         onTap: () {
-                          if (_formKey.currentState!.validate()) {
-                            // login();
-                            signIn(emailController.text.trim(),
-                                passwordController.text.trim());
-                          }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ResetPassword()),
+                          );
                         },
                         child: Container(
                           height: 56,
@@ -219,7 +220,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           child: const Center(
                               child: Text(
-                            "Facebook Login",
+                            "Reset Password",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
